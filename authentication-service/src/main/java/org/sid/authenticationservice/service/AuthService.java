@@ -1,6 +1,5 @@
 package org.sid.authenticationservice.service;
 
-
 import org.sid.authenticationservice.dao.UserRepository;
 import org.sid.authenticationservice.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +16,7 @@ public class AuthService {
     }
 
     public User signUp(User user) {
+        // Ensure password is encoded before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

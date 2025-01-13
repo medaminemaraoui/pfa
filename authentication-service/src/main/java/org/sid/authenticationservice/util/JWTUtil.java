@@ -1,78 +1,46 @@
 package org.sid.authenticationservice.util;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JWTUtil {
 
-    // Secret key used to sign the JWT token (secure this key in a real application)
-    private final String SECRET_KEY = "mySecretKeyForJWT";
+    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512); // Secure 512-bit key
 
-    // Token expiration time in milliseconds (e.g., 24 hours = 86400000 ms)
-    private final long EXPIRATION_TIME = 24 * 60 * 60 * 1000;
+    private final int expirationInMs = 3600000; // Token validity: 1 hour
 
-    /**
-     * Generates a JWT token for the authenticated user.
-     *
-     * @param authentication the authentication object containing user details
-     * @return the generated JWT token
-     */
+    // Method to generate JWT Token
     public String generateToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+        User user = (User) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(userDetails.getUsername()) // The "subject" claim is typically the username or user ID
-                .setIssuedAt(new Date()) // Issue timestamp
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Expiration time
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY) // Sign the token with the secret key
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + expirationInMs))
+                .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    /**
-     * Extracts the username (subject) from the token.
-     *
-     * @param token the JWT token
-     * @return the username from the token
-     */
-    public String extractUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    // Validate JWT Token
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            System.err.println("Invalid JWT: " + e.getMessage());
+        }
+        return false;
     }
 
-    /**
-     * Validates the given JWT token against the user details.
-     *
-     * @param token       the JWT token
-     * @param userDetails the user details to validate against
-     * @return true if the token is valid, false otherwise
-     */
-    public boolean validateToken(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    /**
-     * Checks if the JWT token is expired.
-     *
-     * @param token the JWT token
-     * @return true if the token is expired, false otherwise
-     */
-    private boolean isTokenExpired(String token) {
-        Date expiration = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-
-        return expiration.before(new Date());
+    // Extract username from JWT Token
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }

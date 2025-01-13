@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,6 +24,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthService authService, UserRepository userRepository, AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
         this.authService = authService;
@@ -56,23 +59,25 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody JwtRequest jwtRequest) {
         try {
-            // Authenticate the user using authenticationManager
+            logger.info("Attempting login with username: {}", jwtRequest.getUsername());
+
+            // Authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword())
             );
 
-            // Set authentication in the SecurityContext
+            logger.info("Authentication successful for: {}", jwtRequest.getUsername());
+
+            // Set authentication in SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Generate JWT token
+            // Generate and return JWT
             String token = jwtUtil.generateToken(authentication);
-
-            // Return the JWT token as part of the response
             return ResponseEntity.ok(new JwtResponse(token));
+
         } catch (Exception e) {
-            // Return Unauthorized status if there is an authentication error
-            return ResponseEntity.status(401).body("Username or password is incorrect!");
+            logger.error("Login failed: {}", e.getMessage());
+            return ResponseEntity.status(401).body("Error: Username or password is incorrect!");
         }
     }
-
 }
