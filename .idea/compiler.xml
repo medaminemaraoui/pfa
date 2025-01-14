@@ -3,7 +3,7 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
-      <profile name="Annotation profile for authentication-service" enabled="true">
+      <profile name="Annotation profile for fields-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -11,9 +11,10 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
+        <module name="Fields-Service" />
         <module name="Authentication-Service" />
       </profile>
-      <profile name="Annotation profile for Customer-Service" enabled="true">
+      <profile name="Annotation profile for clubservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -21,9 +22,18 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
         <module name="Club-Service" />
-        <module name="Fields-Service" />
-        <module name="Reservation-Service" />
         <module name="Customer-Service" />
+        <module name="Reservation-Service" />
+      </profile>
+      <profile name="Annotation profile for Gateway-Service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Gateway-Service" />
+        <module name="Discovery-Service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -35,7 +45,9 @@
       <module name="Authentication-Service" options="-parameters" />
       <module name="Club-Service" options="-parameters" />
       <module name="Customer-Service" options="-parameters" />
+      <module name="Discovery-Service" options="-parameters" />
       <module name="Fields-Service" options="-parameters" />
+      <module name="Gateway-Service" options="-parameters" />
       <module name="Reservation-Service" options="-parameters" />
       <module name="clubsmanagementservice" options="-parameters" />
     </option>

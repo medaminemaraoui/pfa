@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: club-service
+          uri: lb://club-service
+          predicates:
+            - Path=/api/clubs/**
+
+        - id: fields-service
+          uri: lb://fields-service
+          predicates:
+            - Path=/api/fields/**
+
+
+        - id: reservation-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/api/reservations/**
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customers/**
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/

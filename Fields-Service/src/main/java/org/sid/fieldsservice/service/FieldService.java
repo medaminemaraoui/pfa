@@ -37,15 +37,15 @@ public class FieldService {
         fieldRepository.deleteById(id);
     }
 
-    public List<Field> filterFieldsByLocation(String location) {
-        return fieldRepository.findByLocation(location);
-    }
-
-    public List<Field> filterFieldsByAvailability(boolean isAvailable) {
-        return fieldRepository.findByIsAvailable(isAvailable);
-    }
-
-    public List<Field> filterFieldsByLocationAndAvailability(String location, boolean isAvailable) {
-        return fieldRepository.findByLocationAndIsAvailable(location, isAvailable);
+    public List<Field> getFields(String location, Boolean available) {
+        if (location != null && available != null) {
+            return fieldRepository.findByLocationAndIsAvailable(location, available);
+        } else if (location != null) {
+            return fieldRepository.findByLocation(location);
+        } else if (available != null) {
+            return fieldRepository.findByIsAvailable(available);
+        } else {
+            return fieldRepository.findAll();
+        }
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -17,6 +19,11 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.createCustomer(customer));
+    }
+
+    @GetMapping
+    public List<Customer> getAllClubs() {
+        return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
