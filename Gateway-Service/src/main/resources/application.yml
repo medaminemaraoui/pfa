@@ -3,36 +3,37 @@ spring:
     gateway:
       globalcors:
         cors-configurations:
-          '[/]':
-            allowedOrigins: "http://localhost:4200"
-            allowedHeaders: "*"
+          '[/**]':  # Apply to all endpoints in the gateway
+            allowedOrigins: "http://localhost:4200"  # Allow frontend origin (Angular)
             allowedMethods:
               - GET
               - POST
               - PUT
               - DELETE
-      routes:
-        - id: club-service
-          uri: lb://club-service
-          predicates:
-            - Path=/api/clubs/**
+            allowedHeaders: "*"  # Allow all headers
+            allowCredentials: true  # If needed
+#      routes:
+#        - id: club-service
+#          uri: lb://club-service
+#          predicates:
+#            - Path=/api/clubs/**
+#
+#        - id: fields-service
+#          uri: lb://fields-service
+#          predicates:
+#            - Path=/api/fields/**
+#
+#        - id: reservation-service
+#          uri: lb://reservation-service
+#          predicates:
+#            - Path=/api/reservations/**
+#
+#        - id: customer-service
+#          uri: lb://customer-service
+#          predicates:
+#            - Path=/api/customers/**
 
-        - id: fields-service
-          uri: lb://fields-service
-          predicates:
-            - Path=/api/fields/**
-
-
-        - id: reservation-service
-          uri: lb://reservation-service
-          predicates:
-            - Path=/api/reservations/**
-        - id: customer-service
-          uri: lb://customer-service
-          predicates:
-            - Path=/api/customers/**
-
-eureka:
-  client:
-    service-url:
-      default-zone: http://localhost:8761/eureka/
+#eureka:
+#  client:
+#    service-url:
+#      default-zone: http://localhost:8761/eureka/
