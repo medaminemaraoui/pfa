@@ -1,0 +1,16 @@
+<div>
+  <h2>Add New Field</h2>
+  <form (ngSubmit)="onSubmit()" #fieldForm="ngForm">
+    <label for="fieldName">Field Name:</label>
+    <input type="text" id="fieldName" [(ngModel)]="field.name" name="name" required>
+
+    <label for="fieldLocation">Location:</label>
+    <input type="text" id="fieldLocation" [(ngModel)]="field.location" name="location" required>
+
+    <label for="fieldAvailable">Available:</label>
+    <input type="checkbox" id="fieldAvailable" [(ngModel)]="field.available" name="available">
+
+    <button type="submit" [disabled]="fieldForm.invalid">Add Field</button>
+
+  </form>
+</div>
