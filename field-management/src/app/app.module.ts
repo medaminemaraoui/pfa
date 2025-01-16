@@ -5,13 +5,25 @@ import { AppComponent } from './app.component';
 import { FieldComponent } from './field/field.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-import { FormsModule } from '@angular/forms';  // For ngModel
+import { FormsModule } from '@angular/forms';
+import { IndexComponent } from './index/index.component';
+import { ContactComponent } from './contact/contact.component';
+import { BlogSingleComponent } from './blog-single/blog-single.component';
+import { PortfolioDetailsComponent } from './portfolio-details/portfolio-details.component';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     FieldComponent,
-    ReservationComponent
+    ReservationComponent,
+    IndexComponent,
+    ContactComponent,
+    BlogSingleComponent,
+    PortfolioDetailsComponent,
+
+  
   ],
   imports: [
     BrowserModule,
